@@ -1,0 +1,98 @@
+{
+  "name": "Automated Bug Report Generator from Error Logs",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# ROLE\nYou are a Senior QA Automation Engineer specializing in detailed technical bug reporting. Your goal is to analyze the provided input and generate a highly structured, professional bug report.\n\n# CONSTRAINTS\n- Do not provide conversational filler (e.g., \"Here is the report\").\n- Output ONLY the bug report in the exact format specified below.\n- If data is missing for a field, mark it as \"UNKNOWN\".\n\n# BUG REPORT FORMAT\nUse the following exact structure for your response:\n\n---\n### 🐞 Title: [Short, Descriptive Title]\n**Severity:** [Critical | High | Medium | Low]\n\n#### 📝 Steps to Reproduce\n1. [Step 1]\n2. [Step 2]\n3. [Step 3]\n\n#### 🎯 Results\n- **Expected Result:** What should have happened.\n- **Actual Result:** What actually happened (including error codes).\n\n\nPlease analyze this failed execution and generate a report:\nError: {{ $json.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -112,
+        -128
+      ],
+      "id": "6e1fe1b6-c85e-4f84-b553-3ed1c634672b",
+      "name": "AI Agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        128
+      ],
+      "id": "b54c44ef-37ba-4d81-badc-f32e8da8c17c",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "phb5nd0iSPhXVR5o",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -416,
+        -112
+      ],
+      "id": "9bea204b-2ba4-4e41-bf04-9352903aed9b",
+      "name": "When chat message received",
+      "webhookId": "119bf587-3acc-4da5-8404-7ed46ee6d91f"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c5906134-17bf-4803-8fab-8c4881412197",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b981e32621632abd9c549be7cab219a24596368f67b066261f99adf2cc6a5f30"
+  },
+  "id": "4gB1F6uEtxLgatoT",
+  "tags": []
+}
